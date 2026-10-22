@@ -1,0 +1,326 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PixelForge UI</title>
+<style>
+:root{--bg:#0d0d0f;--pan:#262628;--p2:#323235;--ln:#3d3d42;--tx:#f3f3f5;--mu:#9b9ba5;--acc:#6c8cff;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme=light]{--bg:#e9e9ee;--pan:#fff;--p2:#efeff3;--ln:#d4d4db;--tx:#18181c;--mu:#686873;color-scheme:light}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font:14px/1.4 "Segoe UI",system-ui,sans-serif;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:var(--p2);padding:7px 12px;border-radius:9px;transition:transform .15s,background .15s}
+button:hover{transform:translateY(-1px);background:var(--ln)}button:active{transform:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.p{background:var(--acc);color:#fff;font-weight:600}.p:hover{background:var(--acc);filter:brightness(1.12)}
+input,select{background:var(--p2);border:1px solid var(--ln);border-radius:8px;padding:6px 8px;min-width:0}
+#app{display:flex;height:100%;padding:14px;gap:14px}
+#nav{width:260px;flex:none;background:var(--pan);border:1px solid var(--ln);border-radius:18px;padding:16px 14px;transition:width .3s cubic-bezier(.2,.8,.2,1);overflow:hidden;display:flex;flex-direction:column}
+#nav.c{width:74px}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:0 4px 14px;border-bottom:2px dashed var(--ln);margin-bottom:12px;white-space:nowrap}
+.hd b{font-size:19px;letter-spacing:-.2px;transition:opacity .2s}
+#nav.c .hd b,#nav.c .lb{opacity:0}#nav.c .hd{justify-content:center}#nav.c .hd b{position:absolute}
+.ni{display:flex;align-items:center;gap:14px;width:100%;background:none;padding:8px;border-radius:12px;font-size:15px;text-align:left;margin-bottom:2px;white-space:nowrap}
+.ni.on{background:var(--p2)}.ni:hover{background:var(--p2);transform:none}
+.tile{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;color:#fff;transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.ni:hover .tile{transform:scale(1.12) rotate(-4deg)}
+.tile svg,.ib svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ft{margin-top:auto;font-size:11px;color:var(--mu);padding:8px 4px 0;transition:opacity .2s}#nav.c .ft{opacity:0}
+main{flex:1;min-width:0;position:relative}
+.page{display:none;height:100%;overflow:auto;padding:4px 6px}
+.page.on{display:block;animation:in .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+h1{font-size:34px;margin:6px 0;letter-spacing:-.8px}h3{margin:26px 0 10px;font-size:16px}
+.mu{color:var(--mu)}.grid{display:flex;flex-wrap:wrap;gap:14px}
+.card{background:var(--pan);border:1px solid var(--ln);border-radius:14px;padding:10px;width:260px;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-3px);border-color:var(--acc)}
+.card .r{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.card b{display:block;margin-top:8px}
+.th{position:relative;width:238px;height:134px;overflow:hidden;border-radius:9px;background:#15161a}
+.tag{font-size:11px;background:var(--p2);padding:1px 7px;border-radius:20px}
+.hero{background:linear-gradient(120deg,color-mix(in srgb,var(--acc) 28%,var(--pan)),var(--pan));border:1px solid var(--ln);border-radius:18px;padding:26px;margin-bottom:6px}
+.empty{border:2px dashed var(--ln);border-radius:14px;padding:24px;color:var(--mu)}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+/* editor */
+#editor{padding:0;overflow:hidden}#editor.on{display:flex;flex-direction:column;gap:10px}
+.tb{display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:var(--pan);border:1px solid var(--ln);border-radius:14px;padding:8px}
+#pn{width:170px;font-weight:600}#st{color:var(--mu);font-size:12px;min-width:56px}.sp{flex:1}
+.wk{flex:1;min-height:0;display:grid;grid-template-columns:240px 1fr 290px;gap:10px}
+.pl{background:var(--pan);border:1px solid var(--ln);border-radius:14px;overflow:auto;min-height:0}
+.pl h4{margin:0;padding:10px 12px;font-size:13px;position:sticky;top:0;background:var(--pan);z-index:2;border-bottom:1px solid var(--ln)}
+#q{width:calc(100% - 16px);margin:8px}
+.row{display:flex;align-items:center;gap:6px;padding:4px 8px;cursor:pointer;transition:background .12s;white-space:nowrap}
+.row:hover{background:var(--p2)}.row.on{background:color-mix(in srgb,var(--acc) 35%,transparent)}
+.row small{margin-left:auto;color:var(--mu);font-size:10px}.ar{width:10px;color:var(--mu);font-style:normal}
+.ic{width:17px;height:17px;border-radius:5px;color:#fff;font-size:10px;display:grid;place-items:center;flex:none}
+#cv{background:#17181c;border:1px solid var(--ln);border-radius:14px;display:grid;place-items:center;overflow:hidden;min-height:0}
+#stage{position:relative}
+.screen{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:#202127;user-select:none;-webkit-user-select:none;touch-action:none}
+.mini{width:1280px;height:720px;transform:scale(.186)}
+.el{position:absolute;-webkit-user-drag:none}.el.sel{outline:calc(var(--hs)/4) solid var(--acc)}
+.t{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;white-space:pre;font-family:Gotham,"Segoe UI",sans-serif;font-weight:500}
+.img::after{content:"";position:absolute;inset:25%;border:3px dashed #ffffff55;border-radius:6px}
+.h{position:absolute;width:var(--hs);height:var(--hs);background:#fff;border:calc(var(--hs)/5) solid var(--acc);border-radius:50%;z-index:9;transform:translate(-50%,-50%)}
+.ph{display:flex;gap:8px;padding:10px;align-items:center}.ph small{color:var(--mu);display:block;padding-left:8px}.nm{font-weight:600;width:100%}
+.pr{display:grid;grid-template-columns:78px 1fr;gap:6px;align-items:center;padding:3px 10px}.pr label{color:var(--mu);font-size:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}.g4 input{padding:5px 3px;text-align:center;font-size:12px}
+.pr input[type=color]{padding:0;height:28px;width:100%}.em{padding:14px;color:var(--mu)}.wn{margin:8px 10px;padding:8px;border-radius:8px;background:#f59e0b22;color:#f5b43c;font-size:12px}
+#menu{position:absolute;z-index:30;background:var(--pan);border:1px solid var(--ln);border-radius:12px;padding:6px;display:none;box-shadow:0 12px 30px #0006;animation:in .2s;width:210px}
+#menu button{display:flex;gap:8px;align-items:center;width:100%;background:none;text-align:left}#menu button:hover{background:var(--p2);transform:none}
+#toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);z-index:99;display:grid;gap:6px}
+#toast div{background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:30px;animation:in .3s,out .3s 2.2s forwards;font-weight:500}
+@keyframes out{to{opacity:0;transform:translateY(8px)}}
+dialog{background:var(--pan);color:var(--tx);border:1px solid var(--ln);border-radius:16px;width:min(720px,94vw);padding:18px}dialog::backdrop{background:#0009}
+textarea{width:100%;height:300px;background:#111;color:#cfe;border:1px solid var(--ln);border-radius:10px;padding:10px;font:12px/1.5 Consolas,monospace;resize:vertical}
+.sw{width:34px;height:34px;border-radius:50%;padding:0;border:3px solid transparent}.sw.on{border-color:var(--tx)}
+kbd{background:var(--p2);padding:1px 6px;border-radius:5px;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 10px 8px}.chips button{padding:5px 11px;font-size:12px;border-radius:20px;border:1px solid var(--ln);background:none}.chips button.on{background:color-mix(in srgb,var(--acc) 30%,transparent);border-color:var(--acc)}
+.gb{height:32px;border-radius:9px;border:1px solid var(--ln);margin:6px 10px 0;cursor:copy}.gmw{position:relative;height:30px;margin:0 10px}
+.gm{position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:3px solid var(--tx);cursor:grab;box-shadow:0 2px 6px #0007;touch-action:none;transition:transform .15s}.gm.on{border-color:var(--acc);transform:scale(1.25)}
+.av{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;color:#fff;font-weight:700;flex:none}.fr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}
+.sec{background:var(--pan);border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:14px;max-width:560px}
+.p{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 55%,#ff4d8d));box-shadow:0 4px 16px color-mix(in srgb,var(--acc) 40%,transparent)}
+.ni.on{box-shadow:inset 3px 0 0 var(--acc)}.card:hover{box-shadow:0 10px 30px color-mix(in srgb,var(--acc) 25%,transparent)}
+#cv{background-image:radial-gradient(#ffffff12 1px,transparent 1px);background-size:20px 20px}
+.hero{position:relative;overflow:hidden}.hero::before,.aur{content:"";position:absolute;inset:-30%;background:radial-gradient(40% 40% at 20% 30%,color-mix(in srgb,var(--acc) 50%,transparent),transparent),radial-gradient(35% 35% at 80% 70%,#ff4d8d55,transparent),radial-gradient(30% 30% at 60% 15%,#22d3ee44,transparent);filter:blur(30px);animation:drift 14s ease-in-out infinite alternate;pointer-events:none}.hero>*{position:relative}
+@keyframes drift{to{transform:translate(4%,-3%) rotate(8deg) scale(1.1)}}
+#login{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:var(--bg);overflow:hidden;transition:opacity .45s}#login.out{opacity:0;pointer-events:none}
+.lcard{position:relative;width:min(420px,92vw);text-align:center;padding:34px;border-radius:24px;background:color-mix(in srgb,var(--pan) 82%,transparent);backdrop-filter:blur(14px);border:1px solid var(--ln);display:grid;gap:12px;animation:in .5s}
+.logo{font-size:32px;font-weight:800;letter-spacing:-1px;background:linear-gradient(90deg,var(--acc),#ff4d8d);-webkit-background-clip:text;background-clip:text;color:transparent}.lcard h2{margin:0}.lcard p{margin:0}.lcard .av{margin:0 auto}.big{padding:12px;font-size:16px;width:100%}
+#cmd{position:fixed;inset:0;z-index:150;background:#0008;display:grid;place-items:start center;padding-top:14vh;backdrop-filter:blur(4px)}#cmd[hidden]{display:none}.cbox{width:min(520px,92vw);background:var(--pan);border:1px solid var(--ln);border-radius:16px;padding:10px;animation:in .2s}.cbox input{width:100%;font-size:16px;padding:12px}#cls{max-height:320px;overflow:auto;margin-top:6px}#cls button{display:block;width:100%;text-align:left;background:none;border-radius:8px}#cls button.on{background:color-mix(in srgb,var(--acc) 30%,transparent)}
+@media(max-width:820px){#app{flex-direction:column-reverse;padding:8px;gap:8px}
+#nav{width:100%!important;flex-direction:row;padding:6px;border-radius:16px;justify-content:space-around}.hd,.ft,.lb{display:none}.ni{width:auto;padding:4px;margin:0}
+.wk{grid-template-columns:1fr;grid-template-rows:52vh 200px 260px;overflow:auto}#editor.on{overflow:auto}button,input,select{min-height:38px}#pn{width:120px}h1{font-size:26px}.card{width:100%}.th{width:100%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div id="app">
+<nav id="nav" aria-label="Main"><div class="hd"><b>PixelForge UI</b><button id="col" class="ib" title="Collapse sidebar" aria-label="Collapse sidebar"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM9 4v16M16 9l-3 3 3 3"/></svg></button></div><div id="ni"></div><div class="ft">Independent community tool. Not affiliated with or endorsed by Roblox.<br>Ctrl+K opens commands · v1.2</div></nav>
+<main>
+<section class="page" id="home"><div class="hero"><h1>Welcome back</h1><p class="mu">Design Roblox menus, HUDs and shops visually, then export a Luau script.</p><button class="p" id="cr">Create UI</button> <button id="tpl">Browse templates</button></div><h3>Continue editing</h3><div class="grid" id="hrec"></div><h3>Quick start</h3><div class="grid" id="htpl"></div></section>
+<section class="page" id="editor">
+<div class="tb"><input id="pn" aria-label="Project name"><span id="st">Saved</span><button id="un" title="Undo (Ctrl+Z)">Undo</button><button id="re2" title="Redo (Ctrl+Y)">Redo</button><button class="p" id="ins">Insert</button><button id="sn" title="Snap offsets to grid (hold Alt to bypass)"></button><button id="fitb" title="Turns pixel sizes into scale so the selected element (or the whole UI) fits every device">Fit all devices</button><select id="dv" aria-label="Preview size"></select><span class="sp"></span><button id="cmdb" title="Command palette (Ctrl+K)">Commands</button><button id="shr" title="Share this design with your friends">Share</button><button id="ex">Export Luau</button></div>
+<div class="wk"><div class="pl"><h4>Explorer</h4><input id="q" placeholder="Filter by name or class"><div class="bar" style="margin:0 8px 6px"><button id="mu" title="Move up">Up</button><button id="md" title="Move down">Down</button><button id="du" title="Duplicate (Ctrl+D)">Duplicate</button><button id="de" title="Delete (Del)">Delete</button></div><div id="tree"></div></div>
+<div id="cv"><div id="stage"><div class="screen" id="screen"></div></div></div>
+<div class="pl"><h4>Properties</h4><div id="props"></div></div></div>
+<div id="menu"></div></section>
+<section class="page" id="projects"><h1>My projects</h1><div class="bar"><input id="ps" placeholder="Search projects"><select id="so"><option value="u">Recently edited</option><option value="n">Name</option></select><button class="p" id="np">New project</button></div><div class="grid" id="plist"></div></section>
+<section class="page" id="templates"><h1>Templates</h1><p class="mu">Built-in starters. Each one is a real editable hierarchy, and using one makes a new project.</p><div class="bar"><input id="ts" placeholder="Search templates"></div><div class="grid" id="tlist"></div></section>
+<section class="page" id="learn"><h1>Learn</h1><h3>Make your first UI in 5 steps</h3><ol><li>Press <b>Create UI</b>. You start with an empty ScreenGui.</li><li>Press <b>Insert</b> and add a Frame. Drag it, or pull its handles to resize.</li><li>Pick it in Explorer and change its color in Properties.</li><li>Insert a UICorner while the Frame is selected to round its corners.</li><li>Press <b>Export Luau</b>, copy the script into a LocalScript in StarterPlayerScripts.</li></ol><h3>Shortcuts</h3><p><kbd>Ctrl</kbd>+<kbd>Z</kbd> undo · <kbd>Ctrl</kbd>+<kbd>Y</kbd> redo · <kbd>Ctrl</kbd>+<kbd>D</kbd> duplicate · <kbd>Del</kbd> delete · arrows nudge 1px (<kbd>Shift</kbd> 10px) · <kbd>Alt</kbd> while dragging skips snapping · <kbd>Esc</kbd> cancels a drag</p><h3>Good to know</h3><p class="mu">The browser preview approximates Roblox. Fonts, text scaling and list-layout alignment can differ in-game. Export recreates structure and visuals only, not button logic. Test in Studio before shipping.</p></section>
+<section class="page" id="social"><h1>Profile &amp; friends</h1><div id="acct"></div></section>
+<section class="page" id="settings"><h1>Settings</h1><h3>Theme</h3><div class="bar"><button data-th="dark">Dark</button><button data-th="light">Light</button></div><h3>Accent</h3><div class="bar" id="acs"></div><h3>Snapping</h3><div class="bar"><label><input type="checkbox" id="sc"> Snap to grid</label><label>Grid <input type="number" id="gs" min="1" max="100" style="width:70px"> px</label></div><h3>Data</h3><p class="mu">Projects are saved in this browser only (no account, no cloud sync).</p><button id="wipe">Delete all projects</button></section>
+</main></div><div id="login"><div class="aur"></div><div class="lcard"><div class="logo">PixelForge UI</div><div id="lc"><p class="mu">Checking your sign-in…</p></div><small class="mu">Independent community tool. Not affiliated with or endorsed by Roblox.</small></div></div>
+<div id="cmd" hidden><div class="cbox"><input id="ci" placeholder="Type a command…" aria-label="Command search"><div id="cls"></div></div></div><div id="toast"></div>
+<dialog id="exd"><h3 style="margin-top:0">Luau script</h3><p class="mu">Place as a LocalScript in StarterPlayer › StarterPlayerScripts. It rebuilds the hierarchy and visual properties only. Review it before running.</p><textarea id="code" readonly></textarea><div class="bar" style="margin:10px 0 0"><button class="p" id="cp">Copy</button><button id="dl">Download .txt</button><button id="cl">Close</button></div></dialog>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const K='pixelforge.v1';let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+if(!S||!S.projects)S={projects:{},cur:null,set:{acc:'#6c8cff',theme:'dark',grid:8,snap:true}};
+const MOD=['UICorner','UIStroke','UIListLayout','UIGradient','Shadow','UIAspectRatioConstraint'],TXT=['TextLabel','TextButton','TextBox'];
+const ICO={ScreenGui:['S','#8b8b95'],Frame:['F','#4f8cff'],TextLabel:['T','#e69a0b'],TextButton:['B','#a855f7'],ImageLabel:['I','#14b8a6'],UICorner:['C','#ec4899'],UIStroke:['S','#ec4899'],UIListLayout:['L','#22c55e'],UIGradient:['G','#f97316'],Shadow:['D','#64748b'],TextBox:['X','#a855f7'],UIAspectRatioConstraint:['A','#22c55e']};
+const toast=m=>{const d=document.createElement('div');d.textContent=m;$('#toast').append(d);setTimeout(()=>d.remove(),2600)};
+function defs(c){const b={pos:[.5,0,.5,0],size:[0,200,0,120],anchor:[.5,.5],bg:'#4f8cff',bgt:0};
+return({ScreenGui:{},Frame:b,TextLabel:{...b,size:[0,180,0,44],bg:'#2b2f3a',text:'TextLabel',tc:'#ffffff',ts:20},TextButton:{...b,size:[0,160,0,48],bg:'#6c5cff',text:'Button',tc:'#ffffff',ts:20},TextBox:{...b,size:[0,220,0,44],bg:'#2b2f3a',text:'Type here',tc:'#ffffff',ts:20},ImageLabel:{...b,size:[0,120,0,120],bg:'#2b2f3a',img:''},UICorner:{cr:12},UIStroke:{sc:'#ffffff',st:2},UIListLayout:{pad:8},UIGradient:{stops:[{t:0,c:'#ff7a59',a:0},{t:.5,c:'#ff4d8d',a:0},{t:1,c:'#6c5cff',a:0}],rot:45},Shadow:{sc:'#000000',a:.55,ox:0,oy:8,gr:0},UIAspectRatioConstraint:{ar:1.6}})[c]}
+const N=(cls,name,p,ch)=>({id:uid(),cls,name,props:Object.assign(defs(cls),p||{}),children:ch||[]});
+const cor=(r)=>N('UICorner','UICorner',{cr:r||12});
+const TPL=[
+{t:'Main menu',d:'Title and three buttons in a list layout',mk:()=>N('ScreenGui','MainMenu',{},[N('Frame','Panel',{size:[0,320,0,360],bg:'#1c1f2b'},[cor(16),N('UIStroke','UIStroke',{sc:'#6c8cff'}),N('TextLabel','Title',{pos:[.5,0,0,50],size:[1,0,0,50],text:'MY GAME',ts:34,bgt:1}),N('Frame','Buttons',{pos:[.5,0,0,110],anchor:[.5,0],size:[0,240,0,200],bgt:1},[N('UIListLayout','UIListLayout',{pad:12}),...['Play','Shop','Settings'].map(x=>N('TextButton',x,{size:[1,0,0,52],text:x},[cor(10)]))])])])},
+{t:'Health bar HUD',d:'Bottom-left health bar with a fill and value',mk:()=>N('ScreenGui','HUD',{},[N('Frame','HealthBar',{pos:[0,24,1,-24],anchor:[0,1],size:[0,280,0,30],bg:'#101114'},[cor(15),N('Frame','Fill',{pos:[0,0,0,0],anchor:[0,0],size:[.72,0,1,0],bg:'#ef4444'},[cor(15)]),N('TextLabel','Value',{pos:[0,0,0,0],anchor:[0,0],size:[1,0,1,0],bgt:1,text:'72 / 100',ts:16})])])},
+{t:'Shop item card',d:'Icon, name and buy button',mk:()=>N('ScreenGui','ShopCard',{},[N('Frame','Card',{size:[0,240,0,310],bg:'#1c1f2b'},[cor(16),N('ImageLabel','Icon',{pos:[.5,0,0,100],size:[0,130,0,130]},[cor(14)]),N('TextLabel','ItemName',{pos:[.5,0,0,205],size:[1,-24,0,32],bgt:1,text:'Starter Sword',ts:22}),N('TextButton','Buy',{pos:[.5,0,1,-38],size:[0,190,0,46],bg:'#22c55e',text:'Buy for 250'},[cor(12)])])])},
+{t:'Notification toast',d:'Alert with accent outline and shadow',mk:()=>N('ScreenGui','Toast',{},[N('Frame','Toast',{pos:[1,-24,0,24],anchor:[1,0],size:[0,320,0,72],bg:'#1c1f2b'},[cor(14),N('UIStroke','UIStroke',{sc:'#3b82f6',st:2}),N('Shadow','Shadow',{}),N('TextLabel','Message',{pos:[0,16,.5,0],anchor:[0,.5],size:[1,-32,0,40],bgt:1,text:'Quest complete! +50 XP',ts:18})])])},
+{t:'Confirm dialog',d:'Title, message and two buttons',mk:()=>N('ScreenGui','Dialog',{},[N('Frame','Box',{size:[0,380,0,210],bg:'#1c1f2b'},[cor(16),N('Shadow','Shadow',{}),N('TextLabel','Title',{pos:[.5,0,0,38],size:[1,0,0,40],bgt:1,text:'Leave match?',ts:26}),N('TextLabel','Body',{pos:[.5,0,0,88],size:[1,-40,0,40],bgt:1,text:'You will lose your progress.',ts:17,tc:'#aab4c8'}),N('TextButton','Stay',{pos:[.3,0,1,-40],size:[0,150,0,44],text:'Stay'},[cor(10)]),N('TextButton','Leave',{pos:[.7,0,1,-40],size:[0,150,0,44],bg:'#ef4444',text:'Leave'},[cor(10)])])])},
+{t:'Quest tracker',d:'Gradient card with a progress bar',mk:()=>N('ScreenGui','Quest',{},[N('Frame','Card',{pos:[1,-24,.5,0],anchor:[1,.5],size:[0,270,0,120]},[cor(16),N('UIGradient','UIGradient',{}),N('TextLabel','Title',{pos:[0,16,0,28],anchor:[0,.5],size:[1,-32,0,30],bgt:1,text:'Defeat 10 slimes',ts:20}),N('Frame','Bar',{pos:[.5,0,1,-32],size:[1,-32,0,16],bg:'#000000',bgt:.5},[cor(8),N('Frame','Fill',{pos:[0,0,0,0],anchor:[0,0],size:[.4,0,1,0],bg:'#ffffff'},[cor(8)])])])])}];
+const IC={home:'M4 11l8-7 8 7v9H4z',editor:'M4 4h16v16H4zM4 9h16M9 9v11',projects:'M3 7h6l2 2h10v10H3z',templates:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',learn:'M12 3a9 9 0 100 18 9 9 0 000-18zM9.5 9.5a2.5 2.5 0 115 0c0 2-2.5 2-2.5 4M12 17v.5',settings:'M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4',social:'M16 8a4 4 0 11-8 0 4 4 0 018 0zM4 20c1-4 4-6 8-6s7 2 8 6'};
+const NAV=[['home','Home','#6b6b73'],['editor','Editor','#2f7fd1'],['projects','My Projects','#1f9d7a'],['templates','Templates','#c2467d'],['learn','Learn','#c58a12'],['social','Profile & Friends','#d9534f'],['settings','Settings','#7c4fd6']];
+$('#ni').innerHTML=NAV.map(([k,l,c])=>`<button class="ni" data-p="${k}"><span class="tile" style="background:${c}"><svg viewBox="0 0 24 24"><path d="${IC[k]}"/></svg></span><span class="lb">${l}</span></button>`).join('');
+let sel=null,U=[],R=[],g=null,SCALE=1,lastK='',tm,dev=[1366,768];
+const P=()=>S.projects[S.cur];
+function find(id,n,par){n=n||P().root;if(n.id==id)return{n,par:par||null};for(const c of n.children){const r=find(id,c,n);if(r)return r}return null}
+const hasList=p=>p&&p.children.some(c=>c.cls=='UIListLayout');
+function persist(){try{localStorage.setItem(K,JSON.stringify(S));$('#st').textContent='Saved'}catch(e){$('#st').textContent='Not saved';toast('Browser storage is full or blocked. Export your script to keep your work.')}}
+function save(){if(!S.cur)return;P().updated=Date.now();$('#st').textContent='Saving…';clearTimeout(tm);tm=setTimeout(persist,350)}
+const rgba=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
+function place(e,n,lay){const p=n.props,s=e.style;s.position=lay?'relative':'absolute';s.flex='none';s.width=`calc(${p.size[0]*100}% + ${p.size[1]}px)`;s.height=`calc(${p.size[2]*100}% + ${p.size[3]}px)`;const ar=n.children.find(c=>c.cls=='UIAspectRatioConstraint');s.aspectRatio=ar?ar.props.ar:'';if(ar)s.height='auto';if(!lay){s.left=`calc(${p.pos[0]*100}% + ${p.pos[1]}px)`;s.top=`calc(${p.pos[2]*100}% + ${p.pos[3]}px)`;s.transform=`translate(${-p.anchor[0]*100}%,${-p.anchor[1]*100}%)`}}
+function build(n,par,th){const e=document.createElement('div');e.className='el';e.dataset.id=n.id;const p=n.props,s=e.style,lay=hasList(par),root=n.cls=='ScreenGui';
+if(!root){place(e,n,lay);const gd=n.children.find(c=>c.cls=='UIGradient');s.background=gd?`linear-gradient(${gd.props.rot+90}deg,${gd.props.stops.map(k=>`${rgba(k.c,(1-p.bgt)*(1-k.a))} ${k.t*100}%`).join(',')})`:rgba(p.bg,1-p.bgt)}
+const co=n.children.find(c=>c.cls=='UICorner'),st=n.children.find(c=>c.cls=='UIStroke'),ll=n.children.find(c=>c.cls=='UIListLayout');
+if(co)s.borderRadius=co.props.cr+'px';const sh=n.children.find(c=>c.cls=='Shadow'),bx=[];if(st)bx.push(`0 0 0 ${st.props.st}px ${st.props.sc}`);if(sh)bx.push(`${sh.props.ox}px ${sh.props.oy}px 0 ${sh.props.gr}px ${rgba(sh.props.sc,sh.props.a)}`);if(bx.length)s.boxShadow=bx.join(',');if(ll){s.display='flex';s.flexDirection='column';s.gap=ll.props.pad+'px'}
+if(TXT.includes(n.cls)){const t=document.createElement('span');t.className='t';t.textContent=p.text;t.style.cssText=`color:${p.tc};font-size:${p.ts}px`;e.append(t)}
+if(n.cls=='ImageLabel')e.classList.add('img');
+n.children.forEach(c=>{if(!MOD.includes(c.cls))e.append(build(c,n,th))});
+if(!th&&!root&&n.id==sel){e.classList.add('sel');if(!lay)[['nw',0,0],['n',.5,0],['ne',1,0],['e',1,.5],['se',1,1],['s',.5,1],['sw',0,1],['w',0,.5]].forEach(([d,x,y])=>{const h=document.createElement('div');h.className='h';h.dataset.d=d;h.style.left=x*100+'%';h.style.top=y*100+'%';h.style.cursor=d+'-resize';e.append(h)})}
+return e}
+const mini=r=>{const d=document.createElement('div');d.className='th';const s=document.createElement('div');s.className='screen mini';s.append(...build(r,null,true).children);d.append(s);return d};
+function rc(){$('#screen').replaceChildren(...build(P().root).children)}
+function fit(){const w=$('#cv');if(!w.clientWidth||!S.cur)return;const[W,H]=dev;SCALE=Math.max(.05,Math.min((w.clientWidth-28)/W,(w.clientHeight-28)/H));const st=$('#stage'),sc=$('#screen');st.style.width=W*SCALE+'px';st.style.height=H*SCALE+'px';sc.style.width=W+'px';sc.style.height=H+'px';sc.style.transform=`scale(${SCALE})`;sc.style.setProperty('--hs',(11/SCALE)+'px')}
+new ResizeObserver(fit).observe($('#cv'));
+const IL={1:1},ICN=n=>{const[l,c]=ICO[n.cls];return`<b class="ic" style="background:${c}">${l}</b>`};
+function re(){const q=$('#q').value.toLowerCase();let h='';(function w(n,d){const has=n.children.length,open=!n.collapsed;if(!q||(n.name+n.cls).toLowerCase().includes(q))h+=`<div class="row${n.id==sel?' on':''}" data-id="${n.id}" style="padding-left:${8+d*14}px"><i class="ar" data-t="${n.id}">${has?(open?'▾':'▸'):''}</i>${ICN(n)}<span>${esc(n.name)}</span><small>${n.cls}</small></div>`;if(open||q)n.children.forEach(k=>w(k,d+1))})(P().root,0);$('#tree').innerHTML=h}
+function diag(n){const p=n.props,o=[];if(MOD.includes(n.cls)||n.cls=='ScreenGui')return o;if(p.bgt>=1&&!TXT.includes(n.cls))o.push('Fully transparent background.');if(!p.size[0]&&!p.size[2]&&p.size[1]<=0&&p.size[3]<=0||(!p.size[0]&&p.size[1]<=0)||(!p.size[2]&&p.size[3]<=0))o.push('Size is zero.');if(p.pos[0]<-.1||p.pos[0]>1.1||p.pos[2]<-.1||p.pos[2]>1.1)o.push('Positioned off screen.');return o}
+function rp(){const f=find(sel),el=$('#props');if(!f){el.innerHTML='<p class="em">Nothing selected. Click an element on the canvas or in Explorer.</p>';return}
+const n=f.n,p=n.props,c=n.cls,ro=c=='ScreenGui';let h=`<div class="ph">${ICN(n)}<div style="flex:1"><input class="nm" data-k="name" value="${esc(n.name)}" aria-label="Name"><small>${c}</small></div></div>`;
+const d=diag(n);if(d.length)h+=`<div class="wn">Can’t see it? ${d.join(' ')}</div>`;
+const num=(k,i,st)=>`<input type="number" step="${st}" data-k="${k}" data-i="${i}" value="${p[k][i]}">`;
+const u4=(k,l)=>`<div class="pr"><label>${l}</label><div class="g4" title="X scale · X offset · Y scale · Y offset">${num(k,0,.01)}${num(k,1,1)}${num(k,2,.01)}${num(k,3,1)}</div></div>`;
+const r1=(k,l,t,ex)=>`<div class="pr"><label>${l}</label><input type="${t}" data-k="${k}" ${t=='number'?'':''}value="${esc(p[k])}" ${ex||''}></div>`;
+if(!ro&&!MOD.includes(c))h+=chips(n);if(!ro&&!MOD.includes(c)){h+=u4('pos','Position')+u4('size','Size')+`<div class="pr"><label>AnchorPoint</label><div class="g4" style="grid-template-columns:1fr 1fr">${num('anchor',0,.5)}${num('anchor',1,.5)}</div></div>`+r1('bg','Background','color')+r1('bgt','Transparency','range','min=0 max=1 step=.05');
+if(TXT.includes(c))h+=r1('text','Text','text')+r1('tc','Text color','color')+r1('ts','Text size','number','min=4 max=200')+`<div class="pr"><label>Scale text</label><label><input type="checkbox" data-k="tsc" ${p.tsc?'checked':''}> Shrink to fit box</label></div>`;
+if(c=='ImageLabel')h+=r1('img','Image ID','text','placeholder="rbxassetid://…"')}
+if(c=='UICorner')h+=r1('cr','Radius px','number','min=0');if(c=='UIStroke')h+=r1('sc','Color','color')+r1('st','Thickness','number','min=0');if(c=='UIListLayout')h+=r1('pad','Padding px','number','min=0');
+if(c=='Shadow')h+=r1('sc','Color','color')+r1('a','Opacity','range','min=0 max=1 step=.05')+r1('ox','Offset X','number')+r1('oy','Offset Y','number')+r1('gr','Grow px','number')+'<p class="em">Roblox has no built-in blur, so this exports as a solid offset Frame behind the element.</p>';
+if(c=='UIAspectRatioConstraint')h+=r1('ar','Width ÷ Height','number','min=.1 step=.1')+'<p class="em">Keeps the shape when the screen size changes.</p>';
+if(c=='UIGradient')h+=gw(p)+r1('rot','Rotation','range','min=-180 max=180 step=1')+'<p class="em">The gradient replaces the background color. Transparency is per color stop.</p>';
+if(MOD.includes(c))h+='<div class="pr"><label></label><button data-up="1">Back to parent</button></div>';
+if(ro)h+='<p class="em">The ScreenGui is your whole screen. Press Insert to add a Frame.</p><div class="pr"><label></label><button class="p" data-fit="1">Fit all devices</button></div>';
+if(f.par&&hasList(f.par)&&!MOD.includes(c))h+='<p class="em">This sits in a UIListLayout, so its position is set by the list. Resize it with the Size fields.</p>';
+el.innerHTML=h}
+const sync=()=>{rc();re();rp()};
+function select(id){sel=id;sync()}
+const snap=()=>JSON.stringify(P().root),mark=()=>{U.push(snap());if(U.length>100)U.shift();R=[]};
+function restore(s){P().root=JSON.parse(s);if(!find(sel))sel=P().root.id;sync();save()}
+$('#un').onclick=()=>{if(!U.length)return toast('Nothing to undo');R.push(snap());restore(U.pop())};
+$('#re2').onclick=()=>{if(!R.length)return toast('Nothing to redo');U.push(snap());restore(R.pop())};
+$('#props').oninput=e=>{const t=e.target,k=t.dataset.k;if(t.dataset.gs)return gin(t);if(!k)return;const f=find(sel);if(!f)return;const n=f.n,p=n.props;if(lastK!=sel+k+t.dataset.i){mark();lastK=sel+k+t.dataset.i}
+if(k=='name')n.name=t.value.slice(0,100);else if(t.dataset.i!=null){const x=parseFloat(t.value);if(isNaN(x))return;p[k][+t.dataset.i]=x}else p[k]=t.type=='checkbox'?t.checked:(t.type=='number'||t.type=='range')?(parseFloat(t.value)||0):t.value;rc();re();save()};
+$('#props').onfocusout=()=>{lastK='';setTimeout(()=>{if(!document.activeElement||!document.activeElement.closest('#props'))rp()},0)};
+$('#tree').onclick=e=>{const t=e.target.closest('[data-t]');if(t){const n=find(t.dataset.t).n;n.collapsed=!n.collapsed;re();return}const r=e.target.closest('.row');if(r)select(r.dataset.id)};
+$('#tree').ondblclick=e=>{if(e.target.closest('.row')){setTimeout(()=>{const i=$('.nm');i&&(i.focus(),i.select())},30)}};
+$('#q').oninput=re;
+const LBL={Frame:'Box container',TextLabel:'Text',TextButton:'Button',ImageLabel:'Image',UICorner:'Round corners',UIStroke:'Outline',UIListLayout:'List layout',UIGradient:'Gradient',TextBox:'Text input',Shadow:'Drop shadow',UIAspectRatioConstraint:'Keep shape'};
+$('#menu').innerHTML=Object.keys(LBL).map(c=>`<button data-c="${c}">${ICN({cls:c})}<span>${LBL[c]}</span><small class="mu" style="margin-left:auto">${c}</small></button>`).join('');
+$('#ins').onclick=e=>{const m=$('#menu'),b=e.currentTarget.getBoundingClientRect(),pr=$('#editor').getBoundingClientRect();m.style.left=b.left-pr.left+'px';m.style.top=b.bottom-pr.top+6+'px';m.style.display=m.style.display=='block'?'none':'block'};
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('#menu,#ins'))$('#menu').style.display='none'});
+$('#menu').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;$('#menu').style.display='none';ins(b.dataset.c)};
+function ins(cls){let f=find(sel)||find(P().root.id);if(MOD.includes(f.n.cls))f=find(f.par.id);const t=f.n;
+if(MOD.includes(cls)){if(t.cls=='ScreenGui')return toast('Select a Frame or text element first, then add '+LBL[cls].toLowerCase());if(t.children.some(c=>c.cls==cls))return toast('This already has '+LBL[cls].toLowerCase());if(cls=='Shadow'&&f.par&&hasList(f.par))return toast('Shadows can’t go on items inside a list layout')}
+mark();const n=N(cls,cls);if(cls=='UIAspectRatioConstraint'){const el=sc.querySelector(`[data-id="${t.id}"]`);if(el){const r=el.getBoundingClientRect();if(r.height)n.props.ar=Math.round(r.width/r.height*100)/100}}if(!MOD.includes(cls)&&hasList(t)){n.props.size=[1,0,0,48]}t.children.push(n);t.collapsed=false;sel=n.id;sync();save()}
+function del(){const f=find(sel);if(!f||!f.par)return toast('The ScreenGui can’t be deleted');mark();f.par.children=f.par.children.filter(c=>c.id!=sel);sel=f.par.id;sync();save()}
+function dup(){const f=find(sel);if(!f||!f.par)return;mark();const cp=n=>({...n,id:uid(),props:JSON.parse(JSON.stringify(n.props)),children:n.children.map(cp)});const c=cp(f.n);c.name+=' copy';if(!MOD.includes(c.cls)&&!hasList(f.par)){c.props.pos[1]+=20;c.props.pos[3]+=20}f.par.children.splice(f.par.children.indexOf(f.n)+1,0,c);sel=c.id;sync();save()}
+function mv(d){const f=find(sel);if(!f||!f.par)return;const a=f.par.children,i=a.indexOf(f.n),j=i+d;if(j<0||j>=a.length)return;mark();[a[i],a[j]]=[a[j],a[i]];sync();save()}
+$('#de').onclick=del;$('#du').onclick=dup;$('#mu').onclick=()=>mv(-1);$('#md').onclick=()=>mv(1);
+const sc=$('#screen');
+sc.onpointerdown=e=>{const hd=e.target.closest('.h'),el=e.target.closest('.el');if(!el){select(P().root.id);return}const id=hd?sel:el.dataset.id;if(id!=sel)select(id);const f=find(id);if(!f.par||hasList(f.par)||MOD.includes(f.n.cls))return;
+g={n:f.n,d:hd?hd.dataset.d:'m',x:e.clientX,y:e.clientY,pos:[...f.n.props.pos],size:[...f.n.props.size],s0:snap(),mv:false};sc.setPointerCapture(e.pointerId);e.preventDefault()};
+sc.onpointermove=e=>{if(!g)return;g.e=e;if(g.raf)return;g.raf=requestAnimationFrame(()=>{g.raf=0;const e=g.e;if(!g)return;if(!g.mv&&Math.hypot(e.clientX-g.x,e.clientY-g.y)<3)return;g.mv=true;
+const dx=(e.clientX-g.x)/SCALE,dy=(e.clientY-g.y)/SCALE,n=g.n,p=n.props,gr=S.set.grid,q=v=>S.set.snap&&!e.altKey?Math.round(v/gr)*gr:v;
+if(g.d=='m'){p.pos[1]=q(g.pos[1]+dx);p.pos[3]=q(g.pos[3]+dy)}else{
+const hx=g.d.includes('e')?1:g.d.includes('w')?-1:0,hy=g.d.includes('s')?1:g.d.includes('n')?-1:0;
+if(hx){let w=q(g.size[1]+hx*dx);if(!g.size[0])w=Math.max(8,w);const dw=w-g.size[1];p.size[1]=w;p.pos[1]=g.pos[1]+(hx>0?p.anchor[0]*dw:-(1-p.anchor[0])*dw)}
+if(hy){let h=q(g.size[3]+hy*dy);if(!g.size[2])h=Math.max(8,h);const dh=h-g.size[3];p.size[3]=h;p.pos[3]=g.pos[3]+(hy>0?p.anchor[1]*dh:-(1-p.anchor[1])*dh)}}
+const el=sc.querySelector(`[data-id="${n.id}"]`);if(el)place(el,n,false)})};
+const endg=e=>{if(!g)return;cancelAnimationFrame(g.raf);if(g.mv){U.push(g.s0);R=[];rp();save()}g=null};sc.onpointerup=endg;sc.onpointercancel=endg;
+document.addEventListener('keydown',e=>{
+if(e.key=='Escape'&&g){const p=g.n.props;p.pos=g.pos;p.size=g.size;cancelAnimationFrame(g.raf);g=null;rc();rp();return}
+if(!$('#editor').classList.contains('on')||e.target.closest('input,textarea,select'))return;const k=e.key.toLowerCase(),m=e.ctrlKey||e.metaKey;
+if(m&&k=='z'){e.preventDefault();$('#un').click()}else if(m&&(k=='y'||(k=='z'&&e.shiftKey))){e.preventDefault();$('#re2').click()}else if(m&&k=='d'){e.preventDefault();dup()}else if(k=='delete'||k=='backspace')del();
+else if(k.startsWith('arrow')){const f=find(sel);if(!f||!f.par||hasList(f.par)||MOD.includes(f.n.cls))return;e.preventDefault();mark();const s=e.shiftKey?10:1,p=f.n.props;if(k=='arrowleft')p.pos[1]-=s;if(k=='arrowright')p.pos[1]+=s;if(k=='arrowup')p.pos[3]-=s;if(k=='arrowdown')p.pos[3]+=s;rc();rp();save()}});
+$('#dv').innerHTML=[['Laptop 1366×768',1366,768],['Desktop 1920×1080',1920,1080],['Tablet 1024×768',1024,768],['Phone 390×844',390,844],['Phone landscape 844×390',844,390]].map(([l,w,h])=>`<option value="${w}x${h}">${l}</option>`).join('');
+$('#dv').onchange=e=>{dev=e.target.value.split('x').map(Number);fit()};
+const snb=()=>{$('#sn').textContent='Snap: '+(S.set.snap?S.set.grid+'px':'off')};$('#sn').onclick=()=>{S.set.snap=!S.set.snap;snb();persist()};
+$('#pn').oninput=e=>{P().name=e.target.value.slice(0,80);save()};
+/* lua */
+function lua(){const L=[];let c=0;const q=s=>'"'+[...String(s)].map(ch=>{const o=ch.codePointAt(0);return ch=='\\'?'\\\\':ch=='"'?'\\"':ch=='\n'?'\\n':ch=='\r'?'\\r':o<32||o>126?'\\u{'+o.toString(16)+'}':ch}).join('')+'"';
+const f=x=>Number(Number(x).toFixed(4)),col=h=>`Color3.fromRGB(${parseInt(h.slice(1,3),16)}, ${parseInt(h.slice(3,5),16)}, ${parseInt(h.slice(5,7),16)})`,ud=a=>`UDim2.new(${a.map(f).join(', ')})`;
+L.push('-- Generated by PixelForge UI (independent community tool, not affiliated with Roblox)','-- LocalScript: place in StarterPlayer > StarterPlayerScripts. Review before running.','local Players = game:GetService("Players")','local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")','local o = {}','');
+function w(n,par,idx,lay){const i=++c,v='o['+i+']',p=n.props;const sh=n.children.find(x=>x.cls=='Shadow');if(sh&&par&&!lay){const j=++c,u='o['+j+']',s=sh.props,co=n.children.find(x=>x.cls=='UICorner');L.push(`${u} = Instance.new("Frame")`,`${u}.Name = ${q((n.name||n.cls)+'Shadow')}`,`${u}.AnchorPoint = Vector2.new(${f(p.anchor[0])}, ${f(p.anchor[1])})`,`${u}.Position = ${ud([p.pos[0],p.pos[1]+s.ox,p.pos[2],p.pos[3]+s.oy])}`,`${u}.Size = ${ud([p.size[0],p.size[1]+2*s.gr,p.size[2],p.size[3]+2*s.gr])}`,`${u}.BackgroundColor3 = ${col(s.sc)}`,`${u}.BackgroundTransparency = ${f(1-s.a)}`,`${u}.BorderSizePixel = 0`,`${u}.ZIndex = 0`);if(co){const k2=++c;L.push(`o[${k2}] = Instance.new("UICorner")`,`o[${k2}].CornerRadius = UDim.new(0, ${f(co.props.cr)})`,`o[${k2}].Parent = ${u}`)}L.push(`${u}.Parent = ${par}`)}L.push(`${v} = Instance.new(${q(n.cls)})`,`${v}.Name = ${q(n.name||n.cls)}`);
+if(n.cls=='ScreenGui')L.push(`${v}.ResetOnSpawn = false`,`${v}.ZIndexBehavior = Enum.ZIndexBehavior.Sibling`);
+else if(!MOD.includes(n.cls)){L.push(`${v}.AnchorPoint = Vector2.new(${f(p.anchor[0])}, ${f(p.anchor[1])})`,`${v}.Position = ${ud(p.pos)}`,`${v}.Size = ${ud(p.size)}`,`${v}.BackgroundColor3 = ${hasG(n)?'Color3.new(1, 1, 1)':col(p.bg)}`,`${v}.BackgroundTransparency = ${f(p.bgt)}`,`${v}.BorderSizePixel = 0`);if(n.children.some(x=>x.cls=='Shadow')&&!lay)L.push(`${v}.ZIndex = 1`);if(lay)L.push(`${v}.LayoutOrder = ${idx}`);
+if(TXT.includes(n.cls))L.push(`${v}.Text = ${q(p.text)}`,`${v}.TextColor3 = ${col(p.tc)}`,`${v}.TextSize = ${f(p.ts)}`,`${v}.Font = Enum.Font.Gotham`);if(TXT.includes(n.cls)&&p.tsc){const j=++c;L.push(`${v}.TextScaled = true`,`o[${j}] = Instance.new("UITextSizeConstraint")`,`o[${j}].MaxTextSize = ${f(p.ts)}`,`o[${j}].Parent = ${v}`)}
+if(n.cls=='ImageLabel'&&p.img){const im=/^\d+$/.test(p.img.trim())?'rbxassetid://'+p.img.trim():p.img;L.push(`${v}.Image = ${q(im)}`)}}
+if(n.cls=='UIGradient'){const g=[...p.stops].sort((a,b)=>a.t-b.t).map((k,i,A)=>({...k,t:i==0?0:i==A.length-1?1:k.t}));L.push(`${v}.Color = ColorSequence.new({${g.map(k=>`ColorSequenceKeypoint.new(${f(k.t)}, ${col(k.c)})`).join(', ')}})`,`${v}.Transparency = NumberSequence.new({${g.map(k=>`NumberSequenceKeypoint.new(${f(k.t)}, ${f(k.a)})`).join(', ')}})`,`${v}.Rotation = ${f(p.rot)}`)}if(n.cls=='UIAspectRatioConstraint')L.push(`${v}.AspectRatio = ${f(p.ar)}`);if(n.cls=='UICorner')L.push(`${v}.CornerRadius = UDim.new(0, ${f(p.cr)})`);if(n.cls=='UIStroke')L.push(`${v}.Color = ${col(p.sc)}`,`${v}.Thickness = ${f(p.st)}`);if(n.cls=='UIListLayout')L.push(`${v}.Padding = UDim.new(0, ${f(p.pad)})`,`${v}.SortOrder = Enum.SortOrder.LayoutOrder`);
+if(par)L.push(`${v}.Parent = ${par}`);const hl=hasList(n);let k=0;n.children.filter(x=>x.cls!='Shadow').forEach(ch=>w(ch,v,MOD.includes(ch.cls)?0:k++,hl));L.push('')}
+w(P().root,null,0,false);L.push('o[1].Parent = playerGui');return L.join('\n')}
+$('#ex').onclick=()=>{$('#code').value=lua();$('#exd').showModal()};$('#cl').onclick=()=>$('#exd').close();
+$('#cp').onclick=async()=>{try{await navigator.clipboard.writeText($('#code').value);toast('Copied')}catch(e){$('#code').select();toast('Press Ctrl+C to copy')}};
+$('#dl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([$('#code').value],{type:'text/plain'}));a.download=(P().name||'ui').replace(/[^\w-]+/g,'_')+'.txt';a.click();URL.revokeObjectURL(a.href)};
+/* projects */
+function newP(name,root){const id=uid();root=root||N('ScreenGui','ScreenGui');S.projects[id]={id,name,created:Date.now(),updated:Date.now(),root};S.cur=id;U=[];R=[];sel=root.id;persist();go('editor')}
+const fmt=t=>new Date(t).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+function pcard(p,full){const d=document.createElement('div');d.className='card';d.append(mini(p.root));d.insertAdjacentHTML('beforeend',`<b>${esc(p.name)}</b><span class="mu">Edited ${fmt(p.updated)}</span><div class="r"><span class="tag">Private</span><span class="tag">Saved in browser</span></div><div class="r"><button class="p" data-o="${p.id}">Open</button>${full?`<button data-d="${p.id}">Duplicate</button><button data-x="${p.id}">Delete</button>`:''}</div>`);return d}
+function rhome(){const a=Object.values(S.projects).sort((x,y)=>y.updated-x.updated).slice(0,4);$('#hrec').replaceChildren(...(a.length?a.map(p=>pcard(p)):[Object.assign(document.createElement('div'),{className:'empty',textContent:'No projects yet. Press Create UI or pick a quick start below.'})]));tcards('#htpl','')}
+function rproj(){const q=$('#ps').value.toLowerCase();let a=Object.values(S.projects).filter(p=>p.name.toLowerCase().includes(q));a.sort($('#so').value=='n'?(x,y)=>x.name.localeCompare(y.name):(x,y)=>y.updated-x.updated);$('#plist').replaceChildren(...(a.length?a.map(p=>pcard(p,1)):[Object.assign(document.createElement('div'),{className:'empty',textContent:q?'No projects match your search.':'Nothing here yet. Press New project to start.'})]))}
+function tcards(sel2,q){const a=TPL.filter(t=>(t.t+t.d).toLowerCase().includes(q));$(sel2).replaceChildren(...a.map((t,i)=>{const d=document.createElement('div');d.className='card';d.append(mini(t.mk()));d.insertAdjacentHTML('beforeend',`<b>${t.t}</b><span class="mu">${t.d}</span><div class="r"><span class="tag">Built-in</span></div><div class="r"><button class="p" data-t="${TPL.indexOf(t)}">Use template</button></div>`);return d}))}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+if(d.o){S.cur=d.o;U=[];R=[];sel=P().root.id;go('editor')}
+if(d.t!=null&&b.closest('.card')){const t=TPL[d.t];newP(t.t,t.mk())}
+if(d.d){const p=S.projects[d.d],id=uid();S.projects[id]={...JSON.parse(JSON.stringify(p)),id,name:p.name+' copy',created:Date.now(),updated:Date.now()};persist();rproj();toast('Duplicated')}
+if(d.x){if(b.dataset.arm){delete S.projects[d.x];if(S.cur==d.x)S.cur=null;persist();rproj();toast('Deleted')}else{b.dataset.arm=1;b.textContent='Click again to delete';setTimeout(()=>{b.dataset.arm='';b.textContent='Delete'},2600)}}
+if(d.th){S.set.theme=d.th;theme();persist()}});
+$('#cr').onclick=()=>newP('Untitled UI');$('#np').onclick=()=>newP('Untitled UI');$('#tpl').onclick=()=>go('templates');
+$('#ps').oninput=rproj;$('#so').onchange=rproj;$('#ts').oninput=e=>tcards('#tlist',e.target.value.toLowerCase());
+/* settings + nav */
+const ACC=['#6c8cff','#a46bff','#22c1a1','#ff7a59'];$('#acs').innerHTML=ACC.map(c=>`<button class="sw" data-a="${c}" style="background:${c}" aria-label="Accent ${c}"></button>`).join('');
+function theme(){document.documentElement.dataset.theme=S.set.theme;document.documentElement.style.setProperty('--acc',S.set.acc);$$('.sw').forEach(b=>b.classList.toggle('on',b.dataset.a==S.set.acc))}
+$('#acs').onclick=e=>{const b=e.target.closest('.sw');if(b){S.set.acc=b.dataset.a;theme();persist()}};
+$('#sc').checked=S.set.snap;$('#gs').value=S.set.grid;$('#sc').onchange=e=>{S.set.snap=e.target.checked;snb();persist()};$('#gs').oninput=e=>{S.set.grid=Math.max(1,+e.target.value||8);snb();persist()};
+$('#wipe').onclick=e=>{const b=e.target;if(b.dataset.arm){S.projects={};S.cur=null;persist();toast('All projects deleted')}else{b.dataset.arm=1;b.textContent='Click again to confirm';setTimeout(()=>{b.dataset.arm='';b.textContent='Delete all projects'},2600)}};
+$('#col').onclick=()=>{$('#nav').classList.toggle('c');setTimeout(fit,320)};
+function go(p){if(p=='editor'&&!S.cur)return newP('Untitled UI');$$('.page').forEach(x=>x.classList.toggle('on',x.id==p));$$('.ni').forEach(b=>b.classList.toggle('on',b.dataset.p==p));
+if(p=='home')rhome();if(p=='projects')rproj();if(p=='templates')tcards('#tlist','');if(p=='social')rsoc();
+if(p=='editor'){$('#pn').value=P().name;if(!find(sel))sel=P().root.id;sync();requestAnimationFrame(fit)}}
+$('#ni').onclick=e=>{const b=e.target.closest('.ni');if(b)go(b.dataset.p)};
+window.addEventListener('beforeunload',()=>{clearTimeout(tm);try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}});
+/* style chips, gradient editor, responsive tool */
+const hasG=n=>n.children.some(c=>c.cls=='UIGradient');
+const CH=[['UICorner','Round corners'],['UIStroke','Outline'],['Shadow','Shadow'],['UIGradient','Gradient'],['UIAspectRatioConstraint','Keep shape']];
+const chips=n=>`<div class="chips">${CH.map(([c,l])=>{const on=n.children.some(x=>x.cls==c);return`<button data-add="${c}" class="${on?'on':''}" title="${on?'Edit ':'Add '}${l}">${l}</button>`}).join('')}<button data-fit="1" title="Turn pixel sizes into scale so this fits every device">Fit devices</button></div><div class="chips"><span class="mu" style="font-size:12px;align-self:center">Presets</span>${Object.keys(PRE).map(k=>`<button data-pre="${k}">${k}</button>`).join('')}</div>`;
+const GP={Sunset:[['#ff7a59',0],['#ff4d8d',.5],['#6c5cff',1]],Ocean:[['#22d3ee',0],['#3b82f6',.5],['#1e3a8a',1]],Neon:[['#a3ff12',0],['#22d3ee',.5],['#a855f7',1]],'Fade out':[['#ffffff',0,0],['#ffffff',1,1]]};
+let gcur=null;
+const gcss=(st,ang)=>`linear-gradient(${ang}deg,${[...st].sort((a,b)=>a.t-b.t).map(k=>`${rgba(k.c,1-k.a)} ${k.t*100}%`).join(',')}),repeating-conic-gradient(#777 0 25%,#444 0 50%) 0 0/12px 12px`;
+function gw(p){if(!p.stops.includes(gcur))gcur=p.stops[0];const s=gcur;return`<div id="gb" class="gb" style="background:${gcss(p.stops,90)}"></div><div class="gmw" id="gmw">${p.stops.map((k,i)=>`<div class="gm${k==s?' on':''}" data-gi="${i}" style="left:${k.t*100}%;background:${k.c}"></div>`).join('')}</div><div class="pr"><label>Stop color</label><input type="color" data-gs="c" value="${s.c}"></div><div class="pr"><label>Transparency</label><input type="range" data-gs="a" min="0" max="1" step=".05" value="${s.a}"></div><div class="pr"><label>Position %</label><input type="number" data-gs="t" min="0" max="100" value="${Math.round(s.t*100)}"></div><div class="chips"><button data-gdel="1">Delete stop</button>${Object.keys(GP).map(k=>`<button data-gp="${k}">${k}</button>`).join('')}</div><p class="em" style="padding:0 10px">Click the bar to add a color. Drag a dot to move it.</p>`}
+function gUpd(p){const b=$('#gb');if(b)b.style.background=gcss(p.stops,90);$$('#gmw .gm').forEach((m,i)=>{const k=p.stops[i];if(k){m.style.left=k.t*100+'%';m.style.background=k.c;m.classList.toggle('on',k==gcur)}})}
+function gin(t){const f=find(sel);if(!f||f.n.cls!='UIGradient'||!gcur)return;const g=t.dataset.gs;if(lastK!='g'+g){mark();lastK='g'+g}gcur[g]=g=='c'?t.value:g=='t'?Math.min(1,Math.max(0,(parseFloat(t.value)||0)/100)):+t.value;gUpd(f.n.props);rc();save()}
+$('#props').addEventListener('pointerdown',e=>{const gm=e.target.closest('.gm'),gb=e.target.closest('#gb');if(!gm&&!gb)return;const f=find(sel);if(!f||f.n.cls!='UIGradient')return;const p=f.n.props,r=$('#gmw').getBoundingClientRect();mark();
+if(gm){gcur=p.stops[+gm.dataset.gi];gUpd(p);const mv=ev=>{gcur.t=Math.min(1,Math.max(0,(ev.clientX-r.left)/r.width));gUpd(p);rc();save()},up=()=>{document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);p.stops.sort((a,b)=>a.t-b.t);rp()};document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);e.preventDefault()}
+else{const t=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),s=[...p.stops].sort((a,b)=>a.t-b.t);let a=s[0],b=s[s.length-1];for(const k of s){if(k.t<=t)a=k;if(k.t>=t){b=k;break}}const u=b.t==a.t?0:(t-a.t)/(b.t-a.t),hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),A=hx(a.c),B=hx(b.c);gcur={t:+t.toFixed(3),c:'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*u).toString(16).padStart(2,'0')).join(''),a:+(a.a+(b.a-a.a)*u).toFixed(2)};p.stops.push(gcur);rp();rc();save()}});
+$('#props').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset,f=find(sel);if(!f)return;
+if(d.add){const ex=f.n.children.find(x=>x.cls==d.add);ex?select(ex.id):ins(d.add)}
+else if(d.up){if(f.par)select(f.par.id)}else if(d.pre)preset(d.pre);else if(d.fit)makeResponsive();
+else if(d.gdel||d.gp){const p=f.n.props;if(d.gdel){if(p.stops.length<=2)return toast('A gradient needs at least 2 colors');mark();p.stops=p.stops.filter(k=>k!=gcur)}else{mark();p.stops=GP[d.gp].map(([c,t,a])=>({c,t,a:a||0}))}gcur=p.stops[0];rp();rc();save()}});
+function makeResponsive(){const f=find(sel)||find(P().root.id),root=P().root,tid=MOD.includes(f.n.cls)?f.par.id:f.n.id;let cnt=0;mark();const r4=v=>Math.round(v*1e4)/1e4;
+(function w(n,pw,ph,par,on){const p=n.props,g=!MOD.includes(n.cls)&&n.cls!='ScreenGui';let W=pw,H=ph;if(g){W=p.size[0]*pw+p.size[1];H=p.size[2]*ph+p.size[3];if(on&&pw>0&&ph>0){const x=p.pos[0]*pw+p.pos[1],y=p.pos[2]*ph+p.pos[3];p.size=[r4(W/pw),0,r4(H/ph),0];if(!hasList(par))p.pos=[r4(x/pw),0,r4(y/ph),0];if(TXT.includes(n.cls))p.tsc=true;cnt++}}n.children.forEach(k=>w(k,W,H,n,on||k.id==tid))})(root,dev[0],dev[1],null,tid==root.id);
+if(!cnt){U.pop();return toast('Nothing to convert here')}sync();save();toast(`Converted ${cnt} element${cnt>1?'s':''} to scale using the ${dev[0]}×${dev[1]} size. Switch device sizes to check.`)}
+$('#fitb').onclick=makeResponsive;
+/* profile & friends (needs the page's db + user capabilities) */
+let DB=null,ME=null,PF=null,SO={sent:[],fr:[],inc:[],out:[],prof:{}};const COLS=['#6c8cff','#a46bff','#22c1a1','#ff7a59','#f5b43c','#ec4899'],UN=/^[A-Za-z0-9_]{3,20}$/;
+const av=(u,s)=>`<span class="av" style="background:${esc((u&&u.color)||'#6c8cff')};${s?`width:${s}px;height:${s}px;font-size:${s/2.2}px`:''}">${esc(((u&&u.username)||'?')[0].toUpperCase())}</span>`;
+async function sinit(){try{const c=window.claude;if(!c){DB=null;rsoc();lgn();return}const u=await c.use('user');ME=u?await u.id():null;DB=await c.use('db');if(DB&&ME){const d=await DB.doc('profiles/'+ME).get();PF=d.exists?d.data():null}}catch(e){DB=null}rsoc();lgn()}
+async function claim(n){const l=n.toLowerCase(),d=await DB.doc('usernames/'+l).get();if(d.exists&&d.data().uid!==ME)throw new Error('That username is taken');await DB.doc('usernames/'+l).set({uid:ME})}
+async function floads(){const my=await DB.doc('social/'+ME).get(),sent=my.exists?(my.data().sent||[]):[],q=await DB.collection('social').where('sent','array-contains',ME).get(),inc=q.docs.map(d=>d.id),prof={};await Promise.all([...new Set([...sent,...inc])].map(async id=>{try{const d=await DB.doc('profiles/'+id).get();if(d.exists)prof[id]=d.data()}catch(e){}}));SO={sent,fr:sent.filter(i=>inc.includes(i)),inc:inc.filter(i=>!sent.includes(i)),out:sent.filter(i=>!inc.includes(i)),prof}}
+const frow=(id,b)=>{const u=SO.prof[id]||{username:'Unknown'};return`<div class="fr">${av(u)}<div><b style="margin:0">${esc(u.username)}</b><div class="mu" style="font-size:12px">${esc(u.bio||'')}</div></div><span class="sp"></span>${b}</div>`};
+async function rsoc(){const el=$('#acct');if(!el)return;
+if(!DB||!ME){el.innerHTML='<div class="empty" style="max-width:560px">Accounts and friends need this page opened while signed in to Claude, and your friends need access to the shared page too. Right now it’s running without that, so your designs stay on this device. Everything else still works.</div>';return}
+if(!PF){el.innerHTML='<div class="sec"><h3 style="margin-top:0">Create your account</h3><p class="mu">Pick a username (3–20 letters, numbers or _). There’s no email and no password: your Claude sign-in is the key, so there’s nothing to leak or forget.</p><div class="bar"><input id="un2" placeholder="username" maxlength="20"><button class="p" id="mk">Create account</button></div></div>';return}
+try{await floads()}catch(e){toast('Couldn’t load friends: '+(e.message||e))}
+FD=[];try{for(const id of [ME,...SO.fr]){const q=await DB.collection(`designs/${id}/items`).get();q.docs.forEach(d=>{const v=d.data();try{const r=JSON.parse(v.json);if(valid(r))FD.push({by:id,id:d.id,name:String(v.name||'Untitled').slice(0,80),root:r})}catch(x){}})}}catch(e){}
+el.innerHTML=`<div class="sec"><div class="bar" style="gap:14px">${av(PF,64)}<div><h3 style="margin:0">${esc(PF.username)}</h3><div class="mu">${esc(PF.bio||'No bio yet')}</div></div></div><h3>Edit profile</h3><div class="pr" style="padding:3px 0"><label>Username</label><input id="pun" maxlength="20" value="${esc(PF.username)}"></div><div class="pr" style="padding:3px 0"><label>Bio</label><input id="pbio" maxlength="120" value="${esc(PF.bio||'')}"></div><div class="bar" style="margin-top:10px">${COLS.map(c=>`<button class="sw${c==PF.color?' on':''}" data-col="${c}" style="background:${c}" aria-label="Avatar color ${c}"></button>`).join('')}<button class="p" id="sv">Save profile</button></div></div>
+<div class="sec"><h3 style="margin-top:0">Add friends</h3><div class="bar"><input id="fq" placeholder="Exact username"><button class="p" id="fd">Find</button></div><div id="fres"></div></div>
+<div class="sec"><h3 style="margin-top:0">Friends (${SO.fr.length})</h3>${SO.fr.map(i=>frow(i,`<button data-fx="${i}">Remove</button>`)).join('')||'<p class="mu">No friends yet. Search a username above.</p>'}${SO.inc.length?`<h3>Requests</h3>${SO.inc.map(i=>frow(i,`<button class="p" data-fa="${i}">Accept</button>`)).join('')}`:''}${SO.out.length?`<h3>Sent</h3>${SO.out.map(i=>frow(i,`<button data-fx="${i}">Cancel</button>`)).join('')}`:''}</div>`+dh();$$('.mph').forEach(h=>h.replaceWith(mini(FD[+h.dataset.i].root)))}
+$('#acct').addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset,set=(p,v)=>DB.doc(p).set(v);try{
+if(b.id=='mk'){const n=$('#un2').value.trim();if(!UN.test(n))return toast('Use 3–20 letters, numbers or _');await claim(n);PF={username:n,bio:'',color:COLS[0]};await set('profiles/'+ME,PF);await set('social/'+ME,{sent:[]});toast('Account created');rsoc()}
+else if(b.id=='sv'){const n=$('#pun').value.trim();if(!UN.test(n))return toast('Use 3–20 letters, numbers or _');if(n.toLowerCase()!=PF.username.toLowerCase()){await claim(n);try{await DB.doc('usernames/'+PF.username.toLowerCase()).delete()}catch(x){}}PF={username:n,bio:$('#pbio').value.slice(0,120),color:PF.color};await set('profiles/'+ME,PF);toast('Profile saved');rsoc()}
+else if(d.col){PF={...PF,color:d.col};await set('profiles/'+ME,PF);rsoc()}
+else if(b.id=='fd'){const n=$('#fq').value.trim().toLowerCase();if(!UN.test(n))return toast('Enter an exact username');const u=await DB.doc('usernames/'+n).get();if(!u.exists)return toast('No one has that username');const id=u.data().uid;if(id==ME)return toast('That’s you');const p=await DB.doc('profiles/'+id).get();SO.prof[id]=p.data()||{username:n};$('#fres').innerHTML=SO.sent.includes(id)?'<p class="mu">Already added.</p>':frow(id,`<button class="p" data-fa="${id}">Add friend</button>`)}
+else if(d.fa){await set('social/'+ME,{sent:[...new Set([...SO.sent,d.fa])]});toast('Friend added');rsoc()}
+else if(d.fx){await set('social/'+ME,{sent:SO.sent.filter(i=>i!=d.fx)});rsoc()}else if(d.us){await DB.doc(`designs/${ME}/items/${d.us}`).delete();toast('Unshared');rsoc()}else if(d.cp){const x=FD[+d.cp];newP(x.name+' (copy)',reid(x.root))}}catch(err){toast(err.message||'Something went wrong')}});
+sinit();
+
+/* login, palette, presets, sharing */
+let FD=[];const reid=n=>({...n,id:uid(),props:JSON.parse(JSON.stringify(n.props)),children:n.children.map(reid)});
+const okc=c=>/^#[0-9a-f]{6}$/i.test(c);
+function valid(n,d=0,k={n:0}){if(d>30||++k.n>800||!n||typeof n!='object'||!ICO[n.cls]||typeof n.name!='string'||!Array.isArray(n.children)||!n.props||typeof n.props!='object')return false;const p=n.props;for(const c of ['bg','tc','sc'])if(p[c]!=null&&!okc(p[c]))return false;if(p.stops&&!(Array.isArray(p.stops)&&p.stops.every(x=>okc(x.c)&&Number.isFinite(x.t)&&Number.isFinite(x.a))))return false;for(const c of ['pos','size','anchor'])if(p[c]&&!(Array.isArray(p[c])&&p[c].every(Number.isFinite)))return false;return n.children.every(c=>valid(c,d+1,k))}
+const dh=()=>`<div class="sec"><h3 style="margin-top:0">Friends’ designs</h3><div class="grid">${FD.map((d,i)=>`<div class="card"><div class="mph" data-i="${i}"></div><b>${esc(d.name)}</b><span class="mu">by ${d.by==ME?'you':esc((SO.prof[d.by]||{}).username||'a friend')}</span><div class="r">${d.by==ME?`<button data-us="${d.id}">Unshare</button>`:`<button class="p" data-cp="${i}">Copy to my projects</button>`}</div></div>`).join('')||'<p class="mu">Nothing shared yet. Press Share in the editor to show a design to your friends.</p>'}</div><p class="mu" style="font-size:12px">Anyone who can open this page can technically read shared designs. This list only shows yours and your friends’.</p></div>`;
+$('#shr').onclick=async()=>{if(!DB||!ME||!PF)return toast('Create an account first (Profile & Friends) to share');try{await DB.doc(`designs/${ME}/items/${S.cur}`).set({name:P().name,json:JSON.stringify(P().root),t:Date.now()});toast('Shared with your friends. Press Share again to update it.')}catch(e){toast('Couldn’t share: '+(e.message||e))}};
+const PRE={Glass:{bg:'#ffffff',bgt:.85,cr:16,st:['#ffffff',1]},Neon:{bg:'#0b0b1a',bgt:0,cr:12,st:['#22d3ee',3],sh:['#22d3ee',.5,0,0,6]},Candy:{cr:24,g:[['#ff9a9e',0],['#fad0c4',1]],sh:['#000000',.35,0,6,0]},Midnight:{cr:10,g:[['#1e1b4b',0],['#4338ca',1]],st:['#818cf8',2]},Card:{bg:'#ffffff',bgt:0,cr:14,sh:['#000000',.3,0,8,0]}};
+function preset(k){const f=find(sel);if(!f)return;const t=MOD.includes(f.n.cls)?f.par:f.n;if(!t||t.cls=='ScreenGui')return toast('Select an element first');const r=PRE[k],pp=find(t.id).par;mark();t.children=t.children.filter(c=>!['UICorner','UIStroke','UIGradient','Shadow'].includes(c.cls));if(r.bg){t.props.bg=r.bg;t.props.bgt=r.bgt||0}if(r.cr)t.children.push(N('UICorner','UICorner',{cr:r.cr}));if(r.st)t.children.push(N('UIStroke','UIStroke',{sc:r.st[0],st:r.st[1]}));if(r.g)t.children.push(N('UIGradient','UIGradient',{stops:r.g.map(([c,x])=>({c,t:x,a:0})),rot:90}));if(r.sh&&!hasList(pp))t.children.push(N('Shadow','Shadow',{sc:r.sh[0],a:r.sh[1],ox:r.sh[2],oy:r.sh[3],gr:r.sh[4]}));sel=t.id;sync();save();toast(k+' style applied')}
+const ACTS=()=>[...NAV.map(([k,l])=>['Go to '+l,()=>go(k)]),...Object.keys(LBL).map(c=>['Insert '+LBL[c],()=>{go('editor');ins(c)}]),...Object.keys(PRE).map(k=>['Style preset: '+k,()=>{go('editor');preset(k)}]),['Export Luau',()=>{go('editor');$('#ex').click()}],['Undo',()=>$('#un').click()],['Redo',()=>$('#re2').click()],['Fit all devices',()=>{go('editor');makeResponsive()}],['New project',()=>newP('Untitled UI')],['Toggle light or dark theme',()=>{S.set.theme=S.set.theme=='dark'?'light':'dark';theme();persist()}]];
+let ci=0,cl=[];
+function cmdr(){const q=$('#ci').value.toLowerCase();cl=ACTS().filter(a=>a[0].toLowerCase().includes(q));ci=Math.min(ci,Math.max(0,cl.length-1));$('#cls').innerHTML=cl.map((a,i)=>`<button data-i="${i}" class="${i==ci?'on':''}">${esc(a[0])}</button>`).join('')||'<p class="em">No matches</p>'}
+function cmdo(o){$('#cmd').hidden=!o;if(o){$('#ci').value='';ci=0;cmdr();$('#ci').focus()}}
+$('#ci').oninput=()=>{ci=0;cmdr()};
+$('#ci').onkeydown=e=>{if(e.key=='ArrowDown'){ci=Math.min(ci+1,cl.length-1);cmdr();e.preventDefault()}else if(e.key=='ArrowUp'){ci=Math.max(ci-1,0);cmdr();e.preventDefault()}else if(e.key=='Enter'&&cl[ci]){cmdo(false);cl[ci][1]()}else if(e.key=='Escape')cmdo(false)};
+$('#cls').onclick=e=>{const b=e.target.closest('button');if(b){cmdo(false);cl[+b.dataset.i][1]()}};
+$('#cmd').onclick=e=>{if(e.target.id=='cmd')cmdo(false)};$('#cmdb').onclick=()=>cmdo(true);
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=='k'){e.preventDefault();cmdo($('#cmd').hidden)}});
+function lout(){const L=$('#login');if(!L)return;L.classList.add('out');setTimeout(()=>L.remove(),450)}
+function lgn(){const L=$('#login');if(!L)return;const ok=DB&&ME;if(!ok&&S.set.guest){L.remove();return}const c=$('#lc');c.dataset.r=1;
+c.innerHTML=ok&&PF?`${av(PF,72)}<h2>Welcome back, ${esc(PF.username)}</h2><p class="mu">You’re signed in with your Claude account.</p><button class="p big" id="lg1">Continue</button>`:ok?`<h2>Pick a username</h2><p class="mu">3–20 letters, numbers or _. No email and no password: your Claude sign-in is your key.</p><input id="lu" placeholder="username" maxlength="20" aria-label="Username"><button class="p big" id="lg2">Create account</button><button id="lg3">Skip for now</button>`:`<h2>Log in with Claude</h2><p class="mu">Accounts and friends use your Claude sign-in, so there’s no password here. Open this page while signed in to Claude, and shared with your friends, to use them. Until then, build as a guest: designs stay on this device.</p><button class="p big" id="lg3">Continue as guest</button>`}
+$('#lc').onclick=async e=>{const b=e.target.closest('button');if(!b)return;try{if(b.id=='lg2'){const n=$('#lu').value.trim();if(!UN.test(n))return toast('Use 3–20 letters, numbers or _');await claim(n);PF={username:n,bio:'',color:COLS[0]};await DB.doc('profiles/'+ME).set(PF);await DB.doc('social/'+ME).set({sent:[]});toast('Account created');rsoc()}else if(b.id=='lg3'&&!(DB&&ME)){S.set.guest=true;persist()}lout()}catch(err){toast(err.message||'Something went wrong')}};
+setTimeout(()=>{if(!$('#lc')||!$('#lc').dataset.r)lgn()},4000);
+theme();snb();go('home');
+</script></body></html>
